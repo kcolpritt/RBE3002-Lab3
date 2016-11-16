@@ -88,7 +88,6 @@ class  Grid_String(Grid):
     def GetDist(self):
             if(self.value == self.goal):
                 return 0
-            dist=0
 
         def CreateChildren(self):
             pass
