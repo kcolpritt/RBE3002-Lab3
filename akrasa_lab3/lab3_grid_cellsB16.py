@@ -11,6 +11,7 @@ from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianc
 from nav_msgs.msg import Odometry, OccupancyGrid
 from kobuki_msgs.msg import BumperEvent
 from tf.transformations import euler_from_quaternion
+from Queue import PriorityQueue
 
 
 
@@ -57,30 +58,41 @@ class Grid(object):
 	#coor - coordinates of the current gridcell
 	#start- coordinates of the starting gridcell
 	#goal- coordinates of the goal
-        #prev- previous gridcell
-    def _init_(self,prev, value, coor, start, goal):
-        self.v = value
-        self.c = coor
-        self.s = start
-        self.g = goal
-        self.dist = self.getDist()
-        if(prev == None):
-            self.p = 0
+        #parent- previous gridcell
+    def _init_(self, parent, coor, value, start, goal):
+        self.value = value
+        self.children = []
+        self.parent = parent
+        self.coor = coor
+        self.dist = 0
+        if parent:
+            self.path = parent.path[:]
+            self.path.append(value)
+            self.start = parent.start
+            self.goal = parent.path
         else: 
-            self.p = prev
+            self.path = value
+            self.start = start
+            self.goal = goal
 
         def GetDist(self):
-            if(self.v == self.g):  
-                return 0
-            dist = 0
-            for i in range(len(self.g)):
-                letter = self.g[i]
-                dist += abs(i - self.v.index(letter))
-            return dist
+            pass
 
-        def adjcell():
-            if(next == None)
+        def CreateChildren(self):
+            pass
                 
+class  Grid_String(Grid):
+    def _init_(self, parent, coor, value, start goal):
+        super(Grid_String, self) ._init_(value, parent, start, goal)
+        self.dist = self.GetDist()
+    def GetDist(self):
+            if(self.value == self.goal):
+                return 0
+            dist=0
+
+        def CreateChildren(self):
+            pass
+          
 
 def aStar(start,goal):
     pass

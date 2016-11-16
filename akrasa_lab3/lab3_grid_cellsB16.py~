@@ -11,6 +11,7 @@ from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianc
 from nav_msgs.msg import Odometry, OccupancyGrid
 from kobuki_msgs.msg import BumperEvent
 from tf.transformations import euler_from_quaternion
+from Queue import PriorityQueue
 
 
 
@@ -51,6 +52,47 @@ def readStart(startPos):
     startPosY = startPos.pose.pose.position.y
     print startPos.pose.pose
 
+class Grid(object):
+
+	#value - the cost associated getting to this gridcell
+	#coor - coordinates of the current gridcell
+	#start- coordinates of the starting gridcell
+	#goal- coordinates of the goal
+        #parent- previous gridcell
+    def _init_(self, parent, coor, value, start, goal):
+        self.value = value
+        self.children = []
+        self.parent = parent
+        self.coor = coor
+        self.dist = 0
+        if parent:
+            self.path = parent.path[:]
+            self.path.append(value)
+            self.start = parent.start
+            self.goal = parent.path
+        else: 
+            self.path = value
+            self.start = start
+            self.goal = goal
+
+        def GetDist(self):
+            pass
+
+        def CreateChildren(self):
+            pass
+                
+class  Grid_String(Grid):
+    def _init_(self, parent, coor, value, start goal):
+        super(Grid_String, self) ._init_(value, parent, start, goal)
+        self.dist = self.GetDist()
+    def GetDist(self):
+            if(self.value == self.goal):
+                return 0
+
+        def CreateChildren(self):
+            pass
+          
+
 def aStar(start,goal):
     pass
     # create a new instance of the map
@@ -74,17 +116,17 @@ def publishCells(grid):
     cells.cell_width = resolution 
     cells.cell_height = resolution
 
-    for i in range(1,height): #height should be set to hieght of grid
-        k=k+1
+   for i in range(1,height): #height should be set to hieght of grid
         for j in range(1,width): #width should be set to width of grid
-            k=k+1
             #print k # used for debugging
             if (grid[k] == 100):
                 point=Point()
-                point.x=(j*resolution)+offsetX + (1.5 * resolution) # added secondary offset 
-                point.y=(i*resolution)+offsetY - (.5 * resolution) # added secondary offset ... Magic ?
+                point.x=(j*resolution) + offsetX - (.5 * resolution) # added secondary offset 
+                point.y=(i*resolution) + offsetY - (.5 * resolution) # added secondary offset 
                 point.z=0
                 cells.cells.append(point)
+            k += 1 
+        k += 1  
     pub.publish(cells)           
 
 #Main handler of the project
