@@ -51,37 +51,6 @@ def readStart(startPos):
     startPosY = startPos.pose.pose.position.y
     print startPos.pose.pose
 
-class Grid(object):
-
-	#value - the cost associated getting to this gridcell
-	#coor - coordinates of the current gridcell
-	#start- coordinates of the starting gridcell
-	#goal- coordinates of the goal
-        #prev- previous gridcell
-    def _init_(self,prev, value, coor, start, goal):
-        self.v = value
-        self.c = coor
-        self.s = start
-        self.g = goal
-        self.dist = self.getDist()
-        if(prev == None):
-            self.p = 0
-        else: 
-            self.p = prev
-
-        def GetDist(self):
-            if(self.v == self.g):  
-                return 0
-            dist = 0
-            for i in range(len(self.g)):
-                letter = self.g[i]
-                dist += abs(i - self.v.index(letter))
-            return dist
-
-        def adjcell():
-            if(next == None)
-                
-
 def aStar(start,goal):
     pass
     # create a new instance of the map
@@ -105,17 +74,17 @@ def publishCells(grid):
     cells.cell_width = resolution 
     cells.cell_height = resolution
 
-   for i in range(1,height): #height should be set to hieght of grid
+    for i in range(1,height): #height should be set to hieght of grid
+        k=k+1
         for j in range(1,width): #width should be set to width of grid
+            k=k+1
             #print k # used for debugging
             if (grid[k] == 100):
                 point=Point()
-                point.x=(j*resolution) + offsetX - (.5 * resolution) # added secondary offset 
-                point.y=(i*resolution) + offsetY - (.5 * resolution) # added secondary offset 
+                point.x=(j*resolution)+offsetX + (1.5 * resolution) # added secondary offset 
+                point.y=(i*resolution)+offsetY - (.5 * resolution) # added secondary offset ... Magic ?
                 point.z=0
                 cells.cells.append(point)
-            k += 1 
-        k += 1  
     pub.publish(cells)           
 
 #Main handler of the project
