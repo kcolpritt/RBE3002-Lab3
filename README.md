@@ -1,2 +1,7 @@
-# RBE3002-Lab3
-Team 2's RBE 3002 Lab
+#RBE-3002
+
+Lab 3 - Group 2
+
+Alex Krasa
+
+Kevin A. Valente-Comas
