@@ -54,11 +54,11 @@ def readStart(startPos):
 
 class Grid(object):
 
-	#value - the cost associated getting to this gridcell
-	#coor - coordinates of the current gridcell
-	#start- coordinates of the starting gridcell
-	#goal- coordinates of the goal
-        #parent- previous gridcell
+	#value - the cost associated getting to this gridcell (int)
+	#coor - coordinates of the current gridcell (tuple)
+	#start- coordinates of the starting gridcell (tuple)
+	#goal- coordinates of the goal (tuple)
+        #parent- previous gridcell (Grid)
     def _init_(self, parent, coor, value, start, goal):
         self.value = value
         self.children = []
@@ -67,7 +67,7 @@ class Grid(object):
         self.dist = 0
         if parent:
             self.path = parent.path[:]
-            self.path.append(value)
+            self.path.append(coor)
             self.start = parent.start
             self.goal = parent.path
         else: 
@@ -82,17 +82,55 @@ class Grid(object):
             pass
                 
 class  Grid_String(Grid):
-    def _init_(self, parent, coor, value, start goal):
+    def _init_(self, value, parent, start, goal, coor):
         super(Grid_String, self) ._init_(value, parent, start, goal)
         self.dist = self.GetDist()
     def GetDist(self):
             if(self.value == self.goal):
                 return 0
             dist=0
+            x_range = self.goal[0]
+            y_range = self.goal[1]
+            dist += sqrt(x_range*x_range + y_range*y_range)
+            return dist
 
-        def CreateChildren(self):
-            pass
+    #needs to be modified
+    def CreateChildren(self):
+        if not (self.children):
+            for i in xrange(len(self.goal)-1):
+                val = self.value
+                val = value + 1
+                child = Grid_String(val, self)
+                self.children.append(child)
           
+
+class AStar_Solver:
+    def _init_(self, start, goal):
+        self.path = []
+        self.visitedQueue = []
+        self.priorityQueue = PriorityQueue()
+        self.start = start
+        self.goal = goal
+
+    def Solve(self):
+        startGrid = Grid_String(0, 0, self.start, self.goal, self.start)
+        count = 0
+        self.priorityQueue.put((0, count, startGrid))
+        while(not self.path and self.priorityQueue.qsize()):
+            closestChild = self.priorityQueue.get()[2]
+            closestChild =.CreatChildren()
+            self.visitedQueue.append(closestChild, value)
+            for child in closestChild.children:
+                if child.value not in self.visitedQueue:
+                    count += 1
+                    if not child.dist:
+                        self.path = child.path
+                        break
+                    self.priorityQueue.put((child.dist, count, child))
+        if not (self.path):
+            print "Goal of" + self.goal + "is not possible"
+        return self.path
+
 
 def aStar(start,goal):
     pass
