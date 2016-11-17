@@ -201,8 +201,8 @@ def publishCells(grid):
     cells.cell_width = resolution 
     cells.cell_height = resolution
 
-   for i in range(1,height): #height should be set to hieght of grid
-        for j in range(1,width): #width should be set to width of grid
+   for i in range(1,height+1): #height should be set to hieght of grid
+        for j in range(1,width+1): #width should be set to width of grid
             #print k # used for debugging
             if (grid[k] == 100):
                 point=Point()
@@ -210,8 +210,7 @@ def publishCells(grid):
                 point.y=(i*resolution) + offsetY - (.5 * resolution) # added secondary offset 
                 point.z=0
                 cells.cells.append(point)
-            k += 1 
-        k += 1  
+            k += 1  
     pub.publish(cells)           
 
 #Main handler of the project
