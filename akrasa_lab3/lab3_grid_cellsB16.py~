@@ -5,7 +5,7 @@ from astar import aStar
 from nav_msgs.msg import GridCells, Path
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianceStamped
-from nav_msgs.msg import Odometry, OccupancyGrid
+from nav_msgs.msg import Odometry, OccupancyGrid, Path
 from kobuki_msgs.msg import BumperEvent
 import tf
 import numpy
@@ -114,6 +114,8 @@ def Waypoints():
 	way = []
 	i = 0
 	pointList = aStar((3, 3), (7, 5), mapGrid)
+	navPath = Path()
+	pathPose = PoseStamped()	
 
 	for item in pointList:
 		current_x = item[0]
@@ -127,26 +129,76 @@ def Waypoints():
 			else:
 				i = 1
 				way.append((current_x, current_y, 0))
+				pathPose.pose.position.x = current_x
+				pathPose.pose.position.y = current_y
+				pathPose.pose.position.z = 0
+				yaw = math.radians(0)
+				roll = 0 
+				pitch = 0
+				quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+				pathPose.pose.orientation.x = quaternion[0]
+				pathPose.pose.orientation.y = quaternion[1]
+				pathPose.pose.orientation.z = quaternion[2]
+				pathPose.pose.orientation.w = quaternion[3]
+
 		elif(next_x == current_x and next_y == current_y+1):
 			if(i == 0 or i == 2):
 				i = 2
 			else:
 				i = 2
 				way.append((current_x, current_y, 90))
+				pathPose.pose.position.x = current_x
+				pathPose.pose.position.y = current_y
+				pathPose.pose.position.z = 0
+				yaw = math.radians(0)
+				roll = 0 
+				pitch = 0
+				quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+				pathPose.pose.orientation.x = quaternion[0]
+				pathPose.pose.orientation.y = quaternion[1]
+				pathPose.pose.orientation.z = quaternion[2]
+				pathPose.pose.orientation.w = quaternion[3]
+
 		if(next_x == current_x-1 and next_y == current_y):
 			if(i == 0 or i == 3):
 				i = 3
 			else:
 				i = 3
 				way.append((current_x, current_y, 180))
+				pathPose.pose.position.x = current_x
+				pathPose.pose.position.y = current_y
+				pathPose.pose.position.z = 0
+				yaw = math.radians(0)
+				roll = 0 
+				pitch = 0
+				quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+				pathPose.pose.orientation.x = quaternion[0]
+				pathPose.pose.orientation.y = quaternion[1]
+				pathPose.pose.orientation.z = quaternion[2]
+				pathPose.pose.orientation.w = quaternion[3]
+
 		elif(next_x == current_x and next_y == current_y-1):
 			if(i == 0 or i == 4):
 				i = 4
 			else:
 				i = 4
 				way.append((current_x, current_y, 270))
+				pathPose.pose.position.x = current_x
+				pathPose.pose.position.y = current_y
+				pathPose.pose.position.z = 0
+				yaw = math.radians(0)
+				roll = 0 
+				pitch = 0
+				quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+				pathPose.pose.orientation.x = quaternion[0]
+				pathPose.pose.orientation.y = quaternion[1]
+				pathPose.pose.orientation.z = quaternion[2]
+				pathPose.pose.orientation.w = quaternion[3]
+		
+		navPath.poses.append(pathPose)
 
 	print way
+	return navPath
 
 
 
@@ -163,6 +215,7 @@ def run():
 	goal_sub = rospy.Subscriber('move_base_simple/goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
 	navgoal_sub = rospy.Subscriber('move_base_simple/2goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
 	goal_sub = rospy.Subscriber('initialpose', PoseWithCovarianceStamped, readStart, queue_size=1) #change topic for best results
+	dispathpub = rospy.Publisher("/BS_topic", Path, queue_size=1)
 
 	# wait a second for publisher, subscribers, and TF
 	rospy.sleep(1)
