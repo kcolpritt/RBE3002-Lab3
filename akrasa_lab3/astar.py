@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+
+import rospy
+from astar import aStar
+from nav_msgs.msg import GridCells, Path
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianceStamped
+from nav_msgs.msg import Odometry, OccupancyGrid
+from kobuki_msgs.msg import BumperEvent
+import tf
+import numpy
+import math 
+import rospy, tf, numpy, math
+
 class Node:
 	def __init__(self,value,point):
 		self.value = value
@@ -24,19 +38,20 @@ def getLowestF(openset):
 	return lowest
 
 def aStar(start, goal, grid):
+	global resolution
+	global offsetX
+	global offsetY
+
+
 	print "astar called"
 	#The open and closed sets
 	openset = set()
 	closedset = set()
 	#Current point is the starting point
 
-	#DO NOT EVER USE!!!
-	#print "testy"
-	#current.x = start.pose.pose.position.x
-	#current.y = start.pose.pose.position.y
-	current.x=(j*resolution)+offsetX + (.5 * resolution)
-	current.y=(i*resolution)+offsetY + (.5 * resolution)
-	current.z=0
+	j = int((current.x - offsetX - (.5 * resolution)) / resolution)
+	i = int((current.y - offsetY - (.5 * resolution)) / resolution)
+	
 
 	print "start"
 	#Add the starting point to the open set

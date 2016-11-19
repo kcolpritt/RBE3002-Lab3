@@ -117,6 +117,7 @@ def run():
 	pub = rospy.Publisher("/map_check", GridCells, queue_size=1)  
 	pubpath = rospy.Publisher("/path", GridCells, queue_size=1) # you can use other types if desired
 	pubway = rospy.Publisher("/waypoints", GridCells, queue_size=1)
+	
 	goal_sub = rospy.Subscriber('move_base_simple/goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
 	navgoal_sub = rospy.Subscriber('move_base_simple/2goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
 	goal_sub = rospy.Subscriber('initialpose', PoseWithCovarianceStamped, readStart, queue_size=1) #change topic for best results
