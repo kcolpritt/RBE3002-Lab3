@@ -48,9 +48,6 @@ def readGoal(goal):
 	goalX= goal.pose.position.x
 	goalY= goal.pose.position.y
 	
-	#goalIndex = getIndexFromWorldPoint(goalX,goalY)
-	#print "Printing goal pose"
-	#print goal.pose
 
 
 def readStart(_startPos):
@@ -77,7 +74,6 @@ def readStart(_startPos):
 
 def publishCells(grid):
 	global pub
-	#print "publishing"
 
 	# resolution and offset of the map
 	k=-2
@@ -88,7 +84,6 @@ def publishCells(grid):
 
 	for i in range(0,height): #height should be set to hieght of grid
 		for j in range(0,width): #width should be set to width of grid
-			#print k # used for debugging
 			if (grid[i*width+j] == 100):
 				point=Point()
 				point.x=(j*resolution)+offsetX + (.5 * resolution)
@@ -96,14 +91,6 @@ def publishCells(grid):
 				point.z=0
 				cells.cells.append(point)
 	pub.publish(cells)		   
-
-
-
-
-
-
-
-
 
 
 
@@ -118,6 +105,7 @@ def run():
 	pubpath = rospy.Publisher("/path", GridCells, queue_size=1) # you can use other types if desired
 	pubway = rospy.Publisher("/waypoints", GridCells, queue_size=1)
 	goal_sub = rospy.Subscriber('move_base_simple/goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
+	navgoal_sub = rospy.Subscriber('move_base_simple/2goal', PoseStamped, readGoal, queue_size=1) #change topic for best results
 	goal_sub = rospy.Subscriber('initialpose', PoseWithCovarianceStamped, readStart, queue_size=1) #change topic for best results
 
 	# wait a second for publisher, subscribers, and TF
