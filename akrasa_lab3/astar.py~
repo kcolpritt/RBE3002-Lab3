@@ -116,7 +116,7 @@ def Solve(start, goal, node):
 		current = child
 		shortest = 0
 	node.path.append(current.coor)
-	return current.path
+	return node.path
 
 
 
@@ -133,4 +133,5 @@ def aStar(start, goal, grid):
 	origin = Node(0, start, start, goal, grid)
 	solution = Solve(start, goal, origin)
 	print solution
+	return solution
 	
