@@ -1,12 +1,23 @@
+#!/usr/bin/env python
+import rospy
+from nav_msgs.msg import GridCells, Path
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianceStamped
+from nav_msgs.msg import Odometry, OccupancyGrid
+from kobuki_msgs.msg import BumperEvent
+from tf.transformations import quaternion_from_euler
+import tf
+import numpy
+import math
+import rospy, tf, numpy, math
+
 class Node:
-	def __init__(self,value,point):
+	def __init__(self,value, point, start, goal):
 		self.value = value
 		self.point = point
 		self.parent = None
-		self.H = 0
-		self.G = 0
-	def move_cost(self,other):
-		return 0 if self.value == '.' else 1
+		self.H = start
+		self.G = goal
 		
 	def children(point,grid):
 		x,y = point.point
@@ -23,68 +34,49 @@ def getLowestF(openset):
 			lowest = i
 	return lowest
 
+
+def copyMap(data):
+	global mapGrid
+	global mapData
+	global width
+	global height
+	global mapgrid
+	global resolution
+	global offsetX
+	global offsetY
+	mapGrid = data
+	resolution = data.info.resolution
+	mapData = data.data
+	width = data.info.width
+	height = data.info.height
+	offsetX = data.info.origin.position.x
+	offsetY = data.info.origin.position.y
+	initGrid(mapGrid)
+
+
+
+
 def aStar(start, goal, grid):
+	global resolution
+	global offsetX
+	global offsetY
+	global startPosX
+	global startPosY
+
 	print "astar called"
 	#The open and closed sets
 	openset = set()
 	closedset = set()
 	#Current point is the starting point
 
-	print "testy"
-	current.x = start.pose.pose.position.x
-	current.y = start.pose.pose.position.y
+	
+	print startPosX
+	j = int((pose.position.x - offsetX - (.5 * resolution)) / resolution)
+	i = int((pose.position.y - offsetY - (.5 * resolution)) / resolution)
+	
 
 	print "start"
-	#Add the starting point to the open set
-	openset.add(current)
-	#While the open set is not empty
 
-	print "In loop?"
-	while openset:
-		#Find the item in the open set with the lowest G + H score
-		current = getLowestF(openset)
-		#If it is the item we want, retrace the path and return it
-		if current == goal:
-			path = []
-			while current.parent:
-				path.append(current)
-				current = current.parent
-			path.append(current)
-			return path[::-1]
-		#Remove the item from the open set
-		openset.remove(current)
-		#Add it to the closed set
-		closedset.add(current)
-
-
-		print "here"
-
-		print children(current,grid)
-
-
-		#Loop through the node's children/siblings
-		for node in children(current,grid):
-			#If it is already in the closed set, skip it
-			if node in closedset:
-				continue
-			#Otherwise if it is already in the open set
-			if node in openset:
-				#Check if we beat the G score 
-				new_g = current.G + current.move_cost(node)
-				if node.G > new_g:
-					#If so, update the node to have a new parent
-					node.G = new_g
-					node.parent = current
-			else:
-				#If it isn't in the open set, calculate the G and H score for the node
-				node.G = current.G + current.move_cost(node)
-				node.H = manhattan(node, goal)
-				#Set the parent to our current item
-				node.parent = current
-				#Add it to the set
-				openset.add(node)
-	#Throw an exception if there is no path
-	raise ValueError('No Path Found')
 
 def next_move(pacman,food,grid):
 	#Convert all the points to instances of Node

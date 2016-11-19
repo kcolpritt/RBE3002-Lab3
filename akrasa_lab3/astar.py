@@ -1,12 +1,23 @@
+#!/usr/bin/env python
+import rospy
+from nav_msgs.msg import GridCells, Path
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist, Point, Pose, PoseStamped, PoseWithCovarianceStamped
+from nav_msgs.msg import Odometry, OccupancyGrid
+from kobuki_msgs.msg import BumperEvent
+from tf.transformations import quaternion_from_euler
+import tf
+import numpy
+import math
+import rospy, tf, numpy, math
+
 class Node:
-	def __init__(self,value,point):
+	def __init__(self,value, point, start, goal):
 		self.value = value
 		self.point = point
 		self.parent = None
-		self.H = 0
-		self.G = 0
-	def move_cost(self,other):
-		return 0 if self.value == '.' else 1
+		self.H = start
+		self.G = goal
 		
 	def children(point,grid):
 		x,y = point.point
@@ -23,24 +34,50 @@ def getLowestF(openset):
 			lowest = i
 	return lowest
 
+
+def copyMap(data):
+	global mapGrid
+	global mapData
+	global width
+	global height
+	global mapgrid
+	global resolution
+	global offsetX
+	global offsetY
+	mapGrid = data
+	resolution = data.info.resolution
+	mapData = data.data
+	width = data.info.width
+	height = data.info.height
+	offsetX = data.info.origin.position.x
+	offsetY = data.info.origin.position.y
+	initGrid(mapGrid)
+
+
+
+
 def aStar(start, goal, grid):
+	global resolution
+	global offsetX
+	global offsetY
+	global startPosX
+	global startPosY
+
 	print "astar called"
 	#The open and closed sets
 	openset = set()
 	closedset = set()
 	#Current point is the starting point
 
-	#DO NOT EVER USE!!!
-	#print "testy"
-	#current.x = start.pose.pose.position.x
-	#current.y = start.pose.pose.position.y
-	current.x=(j*resolution)+offsetX + (.5 * resolution)
-	current.y=(i*resolution)+offsetY + (.5 * resolution)
-	current.z=0
+	
+	print startPosX
+	j = int((pose.position.x - offsetX - (.5 * resolution)) / resolution)
+	i = int((pose.position.y - offsetY - (.5 * resolution)) / resolution)
+	
 
 	print "start"
 	#Add the starting point to the open set
-	openset.add(current)
+	#openset.add(current)
 	#While the open set is not empty
 
 
@@ -93,6 +130,7 @@ def aStar(start, goal, grid):
 				openset.add(node)
 	#Throw an exception if there is no path
 	raise ValueError('No Path Found')
+
 
 def next_move(pacman,food,grid):
 	#Convert all the points to instances of Node
