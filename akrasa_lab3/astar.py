@@ -111,8 +111,6 @@ def Solve(start, goal, node):
 		#if(child != 0)
 		child.parent.append(current)
 		node.path.append(current.coor)
-		rospy.sleep(1)
-		print current.coor
 		current = child
 		shortest = 0
 	node.path.append(current.coor)
@@ -133,4 +131,5 @@ def aStar(start, goal, grid):
 	origin = Node(0, start, start, goal, grid)
 	solution = Solve(start, goal, origin)
 	print solution
+	return solution
 	
