@@ -34,11 +34,18 @@ def aStar(start, goal, grid):
 	#print "testy"
 	#current.x = start.pose.pose.position.x
 	#current.y = start.pose.pose.position.y
+	current.x=(j*resolution)+offsetX + (.5 * resolution)
+	current.y=(i*resolution)+offsetY + (.5 * resolution)
+	current.z=0
 
 	print "start"
 	#Add the starting point to the open set
 	openset.add(current)
 	#While the open set is not empty
+
+
+
+
 
 	print "In loop?"
 	while openset:
