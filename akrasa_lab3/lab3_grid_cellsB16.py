@@ -132,12 +132,11 @@ def run():
 
 	while not rospy.is_shutdown():
 		publishCells(mapData) #publishing map data every 2 seconds
-
 		try:
-			retVal = aStar(startPos, goalPos, mapGrid)
+			retVal = aStar((3, 3), (6, 6), mapGrid)
 			if(retVal != None):
 				print "Publishing path"
-				pubpath.publish(retVal)
+		#		pubpath.publish(retVal)
 			
 		except NameError:
 			rospy.sleep(.1)

@@ -36,6 +36,7 @@ def mapCallBack(data):
 	offsetX = data.info.origin.position.x
 	offsetY = data.info.origin.position.y
 	print data.info
+	print mapGrid.info.width
 
 def readGoal(goal):
 	global goalRead
@@ -48,6 +49,9 @@ def readGoal(goal):
 	goalX= goal.pose.position.x
 	goalY= goal.pose.position.y
 	
+	#goalIndex = getIndexFromWorldPoint(goalX,goalY)
+	#print "Printing goal pose"
+	#print goal.pose
 
 
 def readStart(_startPos):
@@ -74,6 +78,7 @@ def readStart(_startPos):
 
 def publishCells(grid):
 	global pub
+	#print "publishing"
 
 	# resolution and offset of the map
 	k=-2
@@ -84,6 +89,7 @@ def publishCells(grid):
 
 	for i in range(0,height): #height should be set to hieght of grid
 		for j in range(0,width): #width should be set to width of grid
+			#print k # used for debugging
 			if (grid[i*width+j] == 100):
 				point=Point()
 				point.x=(j*resolution)+offsetX + (.5 * resolution)
@@ -91,6 +97,14 @@ def publishCells(grid):
 				point.z=0
 				cells.cells.append(point)
 	pub.publish(cells)		   
+
+
+
+
+
+
+
+
 
 
 
@@ -119,12 +133,11 @@ def run():
 
 	while not rospy.is_shutdown():
 		publishCells(mapData) #publishing map data every 2 seconds
-
 		try:
-			retVal = aStar(startPos, goalPos, mapGrid)
+			retVal = aStar((3, 3), (6, 6), mapGrid)
 			if(retVal != None):
 				print "Publishing path"
-				pubpath.publish(retVal)
+		#		pubpath.publish(retVal)
 			
 		except NameError:
 			rospy.sleep(.1)
