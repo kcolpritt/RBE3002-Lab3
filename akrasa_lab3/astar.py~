@@ -15,12 +15,14 @@ class Node:
 	def __init__(self,value, coor, start, goal, grid):
 		self.value = value
 		self.coor = coor
-		self.parent = None
+		self.parent = []
 		self.start = start
 		self.goal = goal
 		self.children = []
 		self.grid = grid
 		self.path = []
+		if(len(self.path) == 0):
+			self.path.append(start)
 		
 	def Children(self):
 		x = self.coor[0]
@@ -28,33 +30,28 @@ class Node:
 		v = self.value
 		s = self.start
 		g = self.goal
+		m = self.grid
 		width = self.grid.info.width
 		height = self.grid.info.height
 
 		for i in range(0, height): #height should be set to hieght of grid
 			for j in range(0, width): #width should be set to width of grid
-				#print k # used for debugging
-				print "I reach conditions:"	
 				if (self.grid.data[i*width+j] == 100):
 					pass
 				elif(x+1 == i and y == j):
-					print 2
-					child1 = Node(v+1, (x+1, y), s, g)
+					child1 = Node(v+1, (x+1, y), s, g, m)
 					self.children.append(child1)
 				elif(x == i and y+1 == j):
-					print 3
-					child2 = Node(v+1, (x, y+1), s, g)
+					child2 = Node(v+1, (x, y+1), s, g, m)
 					self.children.append(child2)
 				elif(x-1 == i and y == j):
-					print 4
-					child3 = Node(v+1, (x-1, y), s, g)
+					child3 = Node(v+1, (x-1, y), s, g, m)
 					self.children.append(child3)
 				elif(x == i and y-1 == j):
-					print 5
-					child4 = Node(v+1, (x, y-1), s, g)
+					child4 = Node(v+1, (x, y-1), s, g, m)
 					self.children.append(child4)
 				else:
-					print 6
+					pass
 						
 
 	def Manhattan(self, point, point2):
@@ -99,6 +96,28 @@ def copyMap(data):
 	initGrid(mapGrid)
 
 
+def Solve(start, goal, node):	
+	shortest = 0
+	current = node
+	while(current.coor != goal):
+		current.Children()
+		for i in current.children:
+			if(shortest == 0):
+				child = i
+				shortest = i.CalF()
+			elif(i.CalF() < shortest):
+				child = i
+				shortest = i.CalF()
+		#if(child != 0)
+		child.parent.append(current)
+		node.path.append(current.coor)
+		rospy.sleep(1)
+		print current.coor
+		current = child
+		shortest = 0
+	node.path.append(current.coor)
+	return current.path
+
 
 
 def aStar(start, goal, grid):
@@ -112,9 +131,6 @@ def aStar(start, goal, grid):
 	#end = (endX, endY)
 
 	origin = Node(0, start, start, goal, grid)
-	origin.CalF()
-	print "stuck on children"
-	origin.Children()
-	print "nope"
-	print origin.children[0].CalF()
+	solution = Solve(start, goal, origin)
+	print solution
 	
