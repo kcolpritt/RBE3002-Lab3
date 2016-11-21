@@ -69,13 +69,6 @@ class Node:
 		return g + h
 		
 
-def getLowestF(openset):
-	lowest = openSet[0]
-	for i in range(0,len(openSet)):
-		if( (i.G + i.H) < (lowest.G + lowest.H) ):
-			lowest = i
-	return lowest
-
 
 def copyMap(data):
 	global mapGrid
