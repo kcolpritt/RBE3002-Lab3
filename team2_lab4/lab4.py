@@ -12,7 +12,7 @@ import numpy
 import math 
 import rospy, tf, numpy, math
 
-
+from lab3_grid_cellsB16 #We'll see if we ca do this or just cpoy and past things.
 
 
 
