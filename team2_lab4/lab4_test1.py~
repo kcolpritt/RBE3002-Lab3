@@ -149,8 +149,8 @@ def genWaypoints(g_path_rev, worldMap):
             tmp_ctr = 0
             gridPoints.append(point)
 
-            dx = point[0] - prev_pt[0]
-            dy = point[1] - prev_pt[1]
+            dx = point[0] - prev_pt.x
+            dy = point[1] - prev_pt.y
             heading = (dx, dy)
             th_heading = math.atan2(heading[1], heading[0])
             q_t = quaternion_from_euler(0, 0, th_heading)
