@@ -112,6 +112,7 @@ def Solve(start, goal, node):
 			#print current.coor == goal
 		shortest = 0
 	node.path.append(current.coor)
+	node.path.append(current.goal)
 	return node.path
 
 
