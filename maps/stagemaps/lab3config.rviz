@@ -6,13 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /goal1
         - /Walls1
         - /GridCells1
         - /GridCells2
-        - /Path1
-        - /PointCloud21
-        - /Odometry1
       Splitter Ratio: 0.5
     Tree Height: 717
   - Class: rviz/Selection
@@ -129,7 +125,7 @@ Visualization Manager:
       Color: 25; 255; 0
       Enabled: true
       Name: GridCells
-      Topic: /waypoints
+      Topic: /lab4/path
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -143,7 +139,7 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Topic: /BS_topic
+      Topic: /lab4/waypoints
       Unreliable: false
       Value: true
     - Class: rviz/TF
@@ -198,7 +194,7 @@ Visualization Manager:
       Length: 1
       Name: Odometry
       Position Tolerance: 0.1
-      Topic: ""
+      Topic: /odom
       Value: true
   Enabled: true
   Global Options:

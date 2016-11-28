@@ -124,6 +124,6 @@ def aStar(start, goal, grid):
 	
 	origin = Node(0, init, init, end, grid)
 	solution = Solve(init, end, origin)
-	#print solution
+	print solution
 	return solution
 	

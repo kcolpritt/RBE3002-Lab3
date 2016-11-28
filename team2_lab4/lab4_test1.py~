@@ -94,7 +94,6 @@ def worldToGrid(worldPoint, worldMap):
 
 # (grid) -> (real world)
 def gridToWorld(gridPoint, worldMap):
-	print gridPoint[0]
 	gridx = float (gridPoint[0])
 	gridy = float (gridPoint[1])
 	res = worldMap.info.resolution
