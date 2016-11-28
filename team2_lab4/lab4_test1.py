@@ -79,6 +79,12 @@ def readStart(startPos):
 	tmp_pose.append(y2)
 	start_pose = tmp_pose
 
+
+def expand(map_data):
+	
+
+
+
 	
 
 
@@ -374,6 +380,7 @@ if __name__ == '__main__':
 	navgoal_sub = rospy.Subscriber('move_base_simple/2goal', PoseStamped, goalCallback, queue_size=1) #change topic for best results
 	goal_sub = rospy.Subscriber('initialpose', PoseWithCovarianceStamped, readStart, queue_size=1) #change topic for best results
 
+	bumper_sub = rospy.Subscriber('/mobile_base/events/bumper', BumperEvent, readBumper, queue_size=1)#
 
 	sub = rospy.Subscriber("/map", OccupancyGrid, mapCallBack)
 	pub = rospy.Publisher("/map_check", GridCells, queue_size=1)  
