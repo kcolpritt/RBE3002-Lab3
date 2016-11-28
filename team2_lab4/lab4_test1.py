@@ -195,6 +195,63 @@ def rvizPath(cell_list, worldMap):
 	path_GC.header.frame_id = 'map'
 	path_pub.publish(path_GC)
 
+'''----------------------------------------Update Cells Function-----------------------------------------'''
+
+def publishCells(grid):
+	global pub
+	#print "publishing"
+
+	# resolution and offset of the map
+	k=-2
+	cells = GridCells()
+	cells.header.frame_id = 'map'
+	cells.cell_width = resolution 
+	cells.cell_height = resolution
+
+	for i in range(0,height): #height should be set to height of grid
+		for j in range(0,width): #width should be set to width of grid
+			#print k # used for debugging
+
+			#or grid[i+1*width+j+1] == 100
+			#or grid[i+1*width+j-1] == 100
+			#or grid[i-1*width+j+1] == 100
+			#or grid[i-1*width+j-1] == 100
+			if (grid[i*width+j] == 100):
+				point=Point()
+				point.x=(j*resolution)+offsetX + (.5 * resolution)
+				point.y=(i*resolution)+offsetY + (.5 * resolution)
+				point.z=0
+				cells.cells.append(point)
+
+			elif (grid[i+1*width+j+1] == 100):
+				point=Point()
+				point.x=(j*resolution) + offsetX + (.5 * resolution)
+				point.y=(i*resolution) + offsetY + (.5 * resolution)
+				point.z=0
+				cells.cells.append(point)
+
+			elif (grid[i+1*width+j-1] == 100):
+				point=Point()
+				point.x=(j*resolution) + offsetX + (.5 * resolution)
+				point.y=(i*resolution) + offsetY + (.5 * resolution)
+				point.z=0
+				cells.cells.append(point)
+
+			elif (grid[i-1*width+j+1] == 100):
+				point=Point()
+				point.x=(j*resolution) + offsetX + (.5 * resolution)
+				point.y=(i*resolution) + offsetY + (.5 * resolution)
+				point.z=0
+				cells.cells.append(point)
+
+			elif (grid[i-1*width+j-1] == 100):
+				point=Point()
+				point.x=(j*resolution) + offsetX + (.5 * resolution)
+				point.y=(i*resolution) + offsetY + (.5 * resolution)
+				point.z=0
+				cells.cells.append(point)
+	pub.publish(cells)
+
 '''----------------------------------------Navigation Functions-----------------------------------------'''
 
 # Publish Twist msgs
