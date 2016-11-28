@@ -94,7 +94,8 @@ def Solve(start, goal, node):
 	shortest = 0
 	current = node
 	child = None
-	while(current.coor[0] != goal[0] and current.coor[1] != goal[1]):
+	#while(current.coor[0] != goal[0] and current.coor[1] != goal[1]):
+	while(current.coor != goal):
 		current.Children()
 		for i in current.children:
 			if(shortest == 0):
@@ -107,25 +108,20 @@ def Solve(start, goal, node):
 			child.parent.append(current)
 			node.path.append(current.coor)
 			current = child
-			rospy.sleep(1)
-			print start, current.coor, goal
+			#rospy.sleep(1)
+			#print start, current.coor, goal
 			#print current.coor == goal
 		shortest = 0
 	node.path.append(current.coor)
-	node.path.append(current.goal)
 	return node.path
 
 
 
 def aStar(start, goal, grid):
-	init = []
-	end = []
+	init = (start[0], start[1])
+	end = (goal[0], goal[1])
 
-	init.append(start[0])
-	init.append(start[1])
-	end.append(goal[0])
-	end.append(goal[1])
-
+	
 	origin = Node(0, init, init, end, grid)
 	solution = Solve(init, end, origin)
 	print solution
